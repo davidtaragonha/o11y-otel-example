@@ -1,6 +1,7 @@
 package org.alonso.o11y.patient.controller;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +19,9 @@ public class PatientController {
 
     @GetMapping("/first-patient")
     public String firstPatient() {
+        MDC.put("custom-key", "Hola".concat(UUID.randomUUID().toString()));
         this.meterRegistry.counter("micro_patient_query_first").increment();
-        LOGGER.info("Querying the first patient");
+        LOGGER.info("Querying the first patient ");
         return "First patient has the id ".concat(UUID.randomUUID().toString());
     }
 }

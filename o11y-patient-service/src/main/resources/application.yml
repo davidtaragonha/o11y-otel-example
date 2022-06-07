@@ -2,7 +2,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: health,info
 spring:
   application:
     name: patient-service
+logging:
+  pattern:
+    console: "%-4r [%t] %5p %c{1} - %m - TracerId=%X{trace_id} SpanId=%X{span_id} Custom=%X{custom-key} %n"
