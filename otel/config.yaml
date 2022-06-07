@@ -1,0 +1,38 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+#  prometheus:
+#    config:
+#      scrape_configs:
+#        - job_name: "cicd-collector"
+#          scrape_interval: 5s
+#          metrics_path: "/actuator/prometheus"
+#          static_configs:
+#            - targets: [ "172.17.0.1:8080" ]
+
+processors:
+  batch:
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+  logging:
+    loglevel: debug
+
+extensions:
+  health_check:
+  zpages:
+    endpoint: :55679
+
+service:
+  extensions: [zpages, health_check]
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus, logging]
+    traces:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ logging ]
